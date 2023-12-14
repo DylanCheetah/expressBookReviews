@@ -11,7 +11,17 @@ app.use(express.json());
 app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUninitialized: true}))
 
 app.use("/customer/auth/*", function auth(req,res,next){
-//Write the authenication mechanism here
+  // Get the current user
+  const user = req.session.user;
+
+  // Is the current user logged in?
+  if(user) {
+    // Proceed
+    next();
+  } else {
+    // Forbidden
+    return res.status(403).json({message: "You must be logged in to post a review."});
+  }
 });
  
 const PORT =5000;
