@@ -32,7 +32,7 @@ regd_users.post("/login", (req,res) => {
     // Send 400 Bad Request
     return res.status(400).json({message: "No password given."});
   }
-  
+
   // Authenticate the user
   if(authenticatedUser(req.body.username, req.body.password)) {
     // Generate token and store it in the session
@@ -47,8 +47,26 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  // Get review content
+  const content = req.body.content;
+
+  // Check if content was provided
+  if(!content) {
+    // Send 400 Bad Request
+    return res.status(400).json({message: "No review content provided."});
+  }
+
+  // Get the name of the current user
+  const user = jwt.verify(req.session.user, "user_fingerprint");
+
+  if(!user) {
+    // Send 400 Bad Request
+    return res.status(400).json({message: "Invalid user token."});
+  }
+
+  // Add the review
+  books[req.params.isbn].reviews[user.username] = content;
+  return res.json({message: "Review successfully added."});
 });
 
 module.exports.authenticated = regd_users;
