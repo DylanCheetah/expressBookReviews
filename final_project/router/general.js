@@ -94,4 +94,16 @@ public_users.get("/Task11/:isbn", (req, res) => {
     });
 });
 
+// Get book by author asynchronously
+public_users.get("/Task12/:author", (req, res) => {
+    // Get book by author
+    axios.get(`http://localhost:5000/author/${req.params.author}`)
+    .then((response) => {
+        return res.json(response.data);
+    })
+    .catch((err) => {
+        return res.json(err);
+    });
+});
+
 module.exports.general = public_users;
