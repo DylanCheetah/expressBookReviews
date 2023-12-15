@@ -75,11 +75,23 @@ public_users.get("/Task10", (req, res) => {
   // Get the book list
   axios.get("http://localhost:5000/")
   .then((response) => {
-    return res.send(response.data);
+    return res.json(response.data);
   })
   .catch((err) => {
-    return res.send(err);
+    return res.json(err);
   });
+});
+
+// Get book details asynchronously
+public_users.get("/Task11/:isbn", (req, res) => {
+    // Get the book details
+    axios.get(`http://localhost:5000/isbn/${req.params.isbn}`)
+    .then((response) => {
+        return res.json(response.data);
+    })
+    .catch((err) => {
+        return res.json(err);
+    });
 });
 
 module.exports.general = public_users;
