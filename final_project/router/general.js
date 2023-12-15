@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require("axios");
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
@@ -67,6 +68,18 @@ public_users.get('/title/:title',function (req, res) {
 public_users.get('/review/:isbn',function (req, res) {
   // Send the reviews for the book identified by the given ISBN
   return res.json(books[req.params.isbn].reviews);
+});
+
+// Get books asynchronously
+public_users.get("/Task10", (req, res) => {
+  // Get the book list
+  axios.get("http://localhost:5000/")
+  .then((response) => {
+    return res.send(response.data);
+  })
+  .catch((err) => {
+    return res.send(err);
+  });
 });
 
 module.exports.general = public_users;
