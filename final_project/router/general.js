@@ -84,26 +84,38 @@ public_users.get("/Task10", (req, res) => {
 
 // Get book details asynchronously
 public_users.get("/Task11/:isbn", (req, res) => {
-    // Get the book details
-    axios.get(`http://localhost:5000/isbn/${req.params.isbn}`)
-    .then((response) => {
-        return res.json(response.data);
-    })
-    .catch((err) => {
-        return res.json(err);
-    });
+  // Get the book details
+  axios.get(`http://localhost:5000/isbn/${req.params.isbn}`)
+  .then((response) => {
+    return res.json(response.data);
+  })
+  .catch((err) => {
+    return res.json(err);
+  });
 });
 
 // Get book by author asynchronously
 public_users.get("/Task12/:author", (req, res) => {
-    // Get book by author
-    axios.get(`http://localhost:5000/author/${req.params.author}`)
-    .then((response) => {
-        return res.json(response.data);
-    })
-    .catch((err) => {
-        return res.json(err);
-    });
+  // Get book by author
+  axios.get(`http://localhost:5000/author/${req.params.author}`)
+  .then((response) => {
+    return res.json(response.data);
+  })
+  .catch((err) => {
+    return res.json(err);
+  });
+});
+
+// Get book by title asynchronously
+public_users.get("/Task13/:title", (req, res) => {
+  // Get book by title
+  axios.get(`http://localhost:5000/title/${req.params.title}`)
+  .then((response) => {
+    return res.json(response.data);
+  })
+  .catch((err) => {
+    return res.json(err);
+  });
 });
 
 module.exports.general = public_users;
