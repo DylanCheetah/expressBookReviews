@@ -69,6 +69,24 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   return res.json({message: "Review successfully added."});
 });
 
+// Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    // Get the ISBN of the review
+    const isbn = req.params.isbn;
+
+    // Get the name of the current user
+    const user = jwt.verify(req.session.user, "user_fingerprint");
+
+    if(!user) {
+        // Send 400 Bad Request
+        return res.status(400).json({message: "Invalid user token."});
+    }
+
+    // Delete the review for the given book
+    delete books[isbn].reviews[user.username];
+    return res.json({message: "Review successfully deleted."});
+});
+
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
