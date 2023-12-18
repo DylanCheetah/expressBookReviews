@@ -31,13 +31,13 @@ public_users.post("/register", (req,res) => {
 
   // Add the new user and send 200 OK
   users.push(req.body);
-  return res.json({message: "User successfully registered."});
+  return res.json({message: "Customer successfully registered. Now you can login."});
 });
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
   // Send all books
-  return res.json(books);
+  return res.json({books});
 });
 
 // Get book details based on ISBN
@@ -50,18 +50,18 @@ public_users.get('/isbn/:isbn',function (req, res) {
 public_users.get('/author/:author',function (req, res) {
   // Filter by author and send the results
   let filteredBooks = Object.keys(books)
-  .map((key) => books[key])
-  .filter((book) => book.author === req.params.author);
-  return res.json(filteredBooks);
+  .filter((isbn) => books[isbn].author === req.params.author)
+  .map((isbn) => ({isbn, title: books[isbn].title, reviews: books[isbn].reviews}));
+  return res.json({booksbyauthor: filteredBooks});
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   // Filter by title and send the results
   let filteredBooks = Object.keys(books)
-  .map((key) => books[key])
-  .filter((book) => book.title === req.params.title);
-  return res.json(filteredBooks);
+  .filter((isbn) => books[isbn].title === req.params.title)
+  .map((isbn) => ({isbn, author: books[isbn].author, reviews: books[isbn].reviews}));
+  return res.json({booksbytitle: filteredBooks});
 });
 
 //  Get book review
@@ -83,7 +83,7 @@ public_users.get("/Task10", (req, res) => {
 });
 
 // Get book details asynchronously
-public_users.get("/Task11/:isbn", (req, res) => {
+public_users.get("/Task11/isbn/:isbn", (req, res) => {
   // Get the book details
   axios.get(`http://localhost:5000/isbn/${req.params.isbn}`)
   .then((response) => {
@@ -95,7 +95,7 @@ public_users.get("/Task11/:isbn", (req, res) => {
 });
 
 // Get book by author asynchronously
-public_users.get("/Task12/:author", (req, res) => {
+public_users.get("/Task12/author/:author", (req, res) => {
   // Get book by author
   axios.get(`http://localhost:5000/author/${req.params.author}`)
   .then((response) => {
@@ -107,7 +107,7 @@ public_users.get("/Task12/:author", (req, res) => {
 });
 
 // Get book by title asynchronously
-public_users.get("/Task13/:title", (req, res) => {
+public_users.get("/Task13/title/:title", (req, res) => {
   // Get book by title
   axios.get(`http://localhost:5000/title/${req.params.title}`)
   .then((response) => {

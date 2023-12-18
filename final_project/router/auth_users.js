@@ -24,13 +24,13 @@ regd_users.post("/login", (req,res) => {
   // Check that a username was given
   if(!username) {
     // Send 400 Bad Request
-    return res.status(400).json({message: "No username given."});
+    return res.status(400).send("No username given.");
   }
 
   // Check that a password was given
   if(!password) {
     // Send 400 Bad Request
-    return res.status(400).json({message: "No password given."});
+    return res.status(400).send("No password given.");
   }
 
   // Authenticate the user
@@ -38,22 +38,22 @@ regd_users.post("/login", (req,res) => {
     // Generate token and store it in the session
     const token = jwt.sign(req.body, "user_fingerprint");
     req.session.user = token;
-    return res.json({message: "Successfully logged in."});
+    return res.send("Customer successfully logged in");
   } else {
     // Send 400 Bad Request
-    return res.status(400).json({message: "Invalid credentials."});
+    return res.status(400).send("Invalid credentials.");
   }
 });
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   // Get review content
-  const content = req.body.content;
+  const content = req.query.review;
 
   // Check if content was provided
   if(!content) {
     // Send 400 Bad Request
-    return res.status(400).json({message: "No review content provided."});
+    return res.status(400).send("No review content provided.");
   }
 
   // Get the name of the current user
@@ -61,12 +61,12 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
 
   if(!user) {
     // Send 400 Bad Request
-    return res.status(400).json({message: "Invalid user token."});
+    return res.status(400).send("Invalid user token.");
   }
 
   // Add the review
   books[req.params.isbn].reviews[user.username] = content;
-  return res.json({message: "Review successfully added."});
+  return res.send(`The review for the book with ISBN ${req.params.isbn} has been added/updated.`);
 });
 
 // Delete a book review
@@ -79,12 +79,12 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
 
     if(!user) {
         // Send 400 Bad Request
-        return res.status(400).json({message: "Invalid user token."});
+        return res.status(400).send("Invalid user token.");
     }
 
     // Delete the review for the given book
     delete books[isbn].reviews[user.username];
-    return res.json({message: "Review successfully deleted."});
+    return res.send(`Reviews for the ISBN ${isbn} posted by the user ${user.username} deleted.`);
 });
 
 module.exports.authenticated = regd_users;
